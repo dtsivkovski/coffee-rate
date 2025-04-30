@@ -2,7 +2,7 @@
 //  Coffee_RateApp.swift
 //  Coffee Rate
 //
-//  Created by Daniel Tsivkovski on 4/29/25.
+//  Boilerplate created by Daniel Tsivkovski on 4/29/25.
 //
 
 import SwiftUI
