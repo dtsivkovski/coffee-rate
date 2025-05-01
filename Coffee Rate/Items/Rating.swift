@@ -9,10 +9,10 @@ import Foundation
 import SwiftData
 import MapKit
 
-enum NoiseLevel {
-    case quiet;
-    case normal;
-    case loud;
+enum NoiseLevel : Int {
+    case quiet = 0
+    case normal = 1
+    case loud = 2
 }
 
 @Model
@@ -21,37 +21,52 @@ class Rating: Identifiable {
     
     // Coffee Shop Data
     var name: String;
-    var location: CLLocationCoordinate2D?;
     var whenVisited: Date;
+    private var latitude: Double?
+    private var longitude: Double?
+    
+    // have to calculate location coordinate using doubles because swift data cannot store this type
+    @Transient var location: CLLocationCoordinate2D? {
+        get {
+            guard let latitude, let longitude else { return nil } // return nil if no latitude or longitude
+            return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        }
+        set {
+            self.latitude = newValue?.latitude;
+            self.longitude = newValue?.longitude;
+        }
+    }
     
     // Rating Information
     var studyVibe: Int;
     var foodOrDrinkRating: Int;
-    var noiseLevel: NoiseLevel;
+    var noiseLevel: NoiseLevel.RawValue;
     var availability: Int;
-    var overallRating: Int;
+    var overallRating: Double;
     var comments: String?;
     
     // initializer
     init(
         id: UUID = UUID(),
         name: String,
-        location: CLLocationCoordinate2D? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
         whenVisited: Date,
         studyVibe: Int,
         foodOrDrinkRating: Int,
         noiseLevel: NoiseLevel,
         availability: Int,
-        overallRating: Int,
+        overallRating: Double,
         comments: String? = nil
     ) {
         self.id = id;
         self.name = name;
-        self.location = location;
+        self.latitude = latitude;
+        self.longitude = longitude;
         self.whenVisited = whenVisited;
         self.studyVibe = studyVibe;
         self.foodOrDrinkRating = foodOrDrinkRating;
-        self.noiseLevel = noiseLevel;
+        self.noiseLevel = noiseLevel.rawValue;
         self.availability = availability;
         self.overallRating = overallRating;
         self.comments = comments;
