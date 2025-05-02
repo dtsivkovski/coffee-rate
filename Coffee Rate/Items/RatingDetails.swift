@@ -19,14 +19,28 @@ struct RatingDetails: View {
         ratings.firstIndex(where: { $0.id == rating.id }) ?? 0;
     }
     
+    var noiseLevelString: String {
+        switch (NoiseLevel(rawValue: rating.noiseLevel)) {
+        case .quiet:
+            return "Quiet";
+            break;
+        case .loud:
+            return "Loud";
+            break;
+        default:
+            return "Normal";
+            break;
+        }
+    }
+    
     var circleBackgroundColor : Color {
         get {
             if (rating.overallRating > 7.0) {
-                return Color(red: 0.5, green: 1.0, blue: 0.5)
+                return Color(red: 213.0/256, green: 252.0/256, blue: 192.0/256)
             } else if (rating.overallRating < 3.5) {
-                return Color(red: 1.0, green: 0.5, blue: 0.5)
+                return Color(red: 255/256, green: 152/256, blue: 140/256)
             } else {
-                return .yellow;
+                return Color(red: 255/256, green: 227/256, blue: 135/256);
             }
         }
     }
@@ -48,12 +62,50 @@ struct RatingDetails: View {
             .padding(20)
             .shadow(radius: 8, y: 5.0)
             ZStack {
-                Circle().fill(circleBackgroundColor)
+                Circle().fill(.white)
                     .frame(height: 90)
-                    .offset(y: -80)
                     .shadow(radius: 6, y: 4)
+                Circle().fill(Gradient(colors: [circleBackgroundColor]))
+                    .frame(height: 80)
+                Text("\(rating.overallRating.formatted())")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .shadow(radius:1, y:2)
             }
+            .offset(y: -80)
+            .padding([.bottom], -70)
+            VStack {
+                Text(rating.name)
+                    .font(.title)
+                    .fontWeight(.bold)
+                RatingProgress(label: "Study Vibe", value: rating.studyVibe, outOf: 10)
+                RatingProgress(label: "Food/Drink", value: rating.foodOrDrinkRating, outOf: 10)
+                RatingProgress(label: "Availability", value: rating.availability, outOf: 5)
+            }
+            .padding([.leading, .trailing], 40)
         }
+    }
+}
+
+struct RatingProgress : View {
+    
+    var label: String;
+    
+    var value: Int;
+    var outOf: Int;
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(label)
+                    .fontWeight(.semibold)
+                Spacer()
+                Text("\(value)/\(outOf)")
+                    .fontWeight(.semibold)
+            }.padding(.bottom, -2)
+            ProgressView(value: Double(value)/Double(outOf))
+        }
+        .padding(.top, 10)
     }
 }
 
