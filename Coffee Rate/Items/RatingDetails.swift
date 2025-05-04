@@ -46,7 +46,7 @@ struct RatingDetails: View {
                 }
             }
             if (rating.overallRating > 7.0) {
-                return Color(red: 213/256, green: 252/256, blue: 192/256)
+                return Color(red: 170/256, green: 230/256, blue: 160/256)
             } else if (rating.overallRating < 3.5) {
                 return Color(red: 255/256, green: 152/256, blue: 140/256)
             } else {
@@ -115,6 +115,7 @@ struct RatingDetails: View {
                     }
                     .padding(16)
                 }
+                // user notes section
                 if (rating.comments != nil) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 16)
@@ -131,7 +132,22 @@ struct RatingDetails: View {
                             .padding(16)
                     }.padding(.top, 10)
                 }
-                
+                //TODO: finish button elements and styling
+                HStack {
+                    Button(action: {}) {
+                        Text("Edit")
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.white)
+                            .shadow(radius: 4, y: 3)
+                    )
+                    .buttonStyle(PlainButtonStyle())
+                    .onTapGesture {
+                        
+                    }
+                }
             }
             .padding([.leading, .trailing], 20)
         }
@@ -196,5 +212,5 @@ struct MapPreview : View {
 }
 
 #Preview {
-    RatingDetails(rating: Rating(name: "Philz Coffee", latitude: 33.789955, longitude: -117.853434, whenVisited: Date(), studyVibe: 9, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 2, overallRating: 5.4, comments: "Really amazing place for a coffee! Good drinks, even better atmosphere, but not really ideal spots to actually study at."))
+    RatingDetails(rating: Rating(name: "Philz Coffee", latitude: 33.789955, longitude: -117.853434, whenVisited: Date(), studyVibe: 9, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 2, overallRating: 7.8, comments: "Really amazing place for a coffee! Good drinks, even better atmosphere, but not really ideal spots to actually study at."))
 }
