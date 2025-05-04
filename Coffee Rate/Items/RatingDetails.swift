@@ -62,26 +62,13 @@ struct RatingDetails: View {
                 MapPreview(name: rating.name, location: rating.location!)
             }
             else {
-                // display little box for no location data
-//                ZStack {
-//                    RoundedRectangle(cornerRadius: 20)
-//                        .fill(Gradient(colors: [
-//                            .blue,
-//                            .black
-//                        ]))
-//                        .frame(height: 150)
-//                        .padding(20)
-//                        .shadow(radius: 8, y: 5.0)
-//                    Text("No location data")
-//                        .font(.title)
-//                        .foregroundStyle(.white)
-//                        .shadow(radius: 2, y: 3)
-//                }
+                // rectangle to account for circle being shifted up when no location
                 Rectangle()
                     .fill(.background)
                     .frame(height:90)
             }
             ZStack {
+                // circle to indicate overall rating
                 Circle().fill(.thinMaterial)
                     .frame(height: 90)
                     .shadow(radius: 6, y: 4)
@@ -95,6 +82,7 @@ struct RatingDetails: View {
             .offset(y: -80)
             .padding([.bottom], -70)
             VStack {
+                // location name
                 Text(rating.name)
                     .font(.title)
                     .fontWeight(.bold)
@@ -112,6 +100,7 @@ struct RatingDetails: View {
                                 .font(.title3)
                                 .fontWeight(.semibold)
                         }.padding(-3)
+                        // all rating progress bars
                         RatingProgress(symbol: "laptopcomputer" ,label: "Study Vibe", value: rating.studyVibe, outOf: 10)
                         RatingProgress(symbol: "cup.and.saucer.fill", label: "Food/Drink", value: rating.foodOrDrinkRating, outOf: 10)
                         RatingProgress(symbol: "person.2.fill", label: "Availability", value: rating.availability, outOf: 5)
@@ -136,8 +125,8 @@ struct RatingDetails: View {
                             .padding(16)
                     }.padding(.top, 10)
                 }
-                //TODO: finish button elements and styling
                 HStack {
+                    // TODO: finish button function
                     Button(action: {}) {
                         Spacer()
                         Text("Edit")
@@ -145,6 +134,7 @@ struct RatingDetails: View {
                     }
                     .buttonStyle(BorderedButtonStyle())
                     .shadow(radius: 6, y: 5.0)
+                    // TODO: finish button function
                     Button(action: {}) {
                         Spacer()
                         Text("Share")
@@ -221,5 +211,5 @@ struct MapPreview : View {
 }
 
 #Preview {
-    RatingDetails(rating: Rating(name: "Philz Coffee",latitude: 33.789955, longitude: -117.853434, whenVisited: Date(), studyVibe: 9, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 2, overallRating: 7.8, comments: "Really amazing place for a coffee! Good drinks, even better atmosphere, but not really ideal spots to actually study at."))
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.7, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"))
 }
