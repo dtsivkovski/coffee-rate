@@ -62,23 +62,27 @@ struct RatingDetails: View {
                 MapPreview(name: rating.name, location: rating.location!)
             }
             else {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Gradient(colors: [
-                            .blue,
-                            .black
-                        ]))
-                        .frame(height: 300)
-                        .padding(20)
-                        .shadow(radius: 8, y: 5.0)
-                    Text("No location data")
-                        .font(.title)
-                        .foregroundStyle(.white)
-                        .shadow(radius: 2, y: 3)
-                }
+                // display little box for no location data
+//                ZStack {
+//                    RoundedRectangle(cornerRadius: 20)
+//                        .fill(Gradient(colors: [
+//                            .blue,
+//                            .black
+//                        ]))
+//                        .frame(height: 150)
+//                        .padding(20)
+//                        .shadow(radius: 8, y: 5.0)
+//                    Text("No location data")
+//                        .font(.title)
+//                        .foregroundStyle(.white)
+//                        .shadow(radius: 2, y: 3)
+//                }
+                Rectangle()
+                    .fill(.background)
+                    .frame(height:90)
             }
             ZStack {
-                Circle().fill(.white)
+                Circle().fill(.thinMaterial)
                     .frame(height: 90)
                     .shadow(radius: 6, y: 4)
                 Circle().fill(Gradient(colors: [circleBackgroundColor]))
@@ -135,19 +139,20 @@ struct RatingDetails: View {
                 //TODO: finish button elements and styling
                 HStack {
                     Button(action: {}) {
+                        Spacer()
                         Text("Edit")
+                        Spacer()
                     }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.white)
-                            .shadow(radius: 4, y: 3)
-                    )
-                    .buttonStyle(PlainButtonStyle())
-                    .onTapGesture {
-                        
+                    .buttonStyle(BorderedButtonStyle())
+                    .shadow(radius: 6, y: 5.0)
+                    Button(action: {}) {
+                        Spacer()
+                        Text("Share")
+                        Spacer()
                     }
-                }
+                    .buttonStyle(BorderedProminentButtonStyle())
+                    .shadow(radius: 8, y: 5.0)
+                }.padding(.top, 10)
             }
             .padding([.leading, .trailing], 20)
         }
@@ -166,6 +171,7 @@ struct RatingProgress : View {
     
     var body: some View {
         VStack {
+            // labels for the specific rating
             HStack {
                 Image(systemName: symbol)
                 Text(label)
@@ -174,6 +180,7 @@ struct RatingProgress : View {
                 Text( alternateLabel != nil ? alternateLabel! : "\(value)/\(outOf)")
                     .fontWeight(.semibold)
             }.padding(.bottom, -2)
+            // progress value
             ProgressView(value: Double(value)/Double(outOf))
         }
         .padding([.top, .bottom], 5)
@@ -186,6 +193,7 @@ struct MapPreview : View {
     var location: CLLocationCoordinate2D;
     
     var body: some View {
+        // create map
         Map(position: .constant(.region(
             MKCoordinateRegion(
                 center: CLLocationCoordinate2D(
@@ -197,12 +205,13 @@ struct MapPreview : View {
                     longitudeDelta: 0.002
                 ))
         )), interactionModes: .zoom){
-            // marker for the coffee shop
+            // create the marker for the coffee shop
             Marker(
                 name,
                 coordinate: location
             )
         }
+        // adjust styling for the map (POI, height, etc)
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
         .frame(height: 300)
         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 20, height: 20)))
@@ -212,5 +221,5 @@ struct MapPreview : View {
 }
 
 #Preview {
-    RatingDetails(rating: Rating(name: "Philz Coffee", latitude: 33.789955, longitude: -117.853434, whenVisited: Date(), studyVibe: 9, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 2, overallRating: 7.8, comments: "Really amazing place for a coffee! Good drinks, even better atmosphere, but not really ideal spots to actually study at."))
+    RatingDetails(rating: Rating(name: "Philz Coffee",latitude: 33.789955, longitude: -117.853434, whenVisited: Date(), studyVibe: 9, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 2, overallRating: 7.8, comments: "Really amazing place for a coffee! Good drinks, even better atmosphere, but not really ideal spots to actually study at."))
 }
