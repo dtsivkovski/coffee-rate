@@ -5,7 +5,7 @@
 //  Created by Daniel Tsivkovski on 4/29/25.
 //
 //  Reference used for Map Search:
-//   - https://www.polpiella.dev/mapkit-and-swiftui-searchable-map
+//   - https://www.polpiella.dev/mapkit-and-swiftui-searchable-map - This reference was used to help create the search aspects for the Add Rating view
 //
 
 
@@ -165,7 +165,6 @@ struct FinalRatingSubmission : View {
             Button(action: {
                 // calculate overall rating
                 let overallRating : Double = (studyVibe + foodAndDrinkRating + (noiseLevel / 3) * 10 + availability * 2) / 40;
-                
                 // create new rating
                 let newRating = Rating(
                     id: UUID(),
