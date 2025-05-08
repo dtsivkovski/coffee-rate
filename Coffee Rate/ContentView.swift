@@ -35,7 +35,6 @@ struct ContentView: View {
                 Text("Stats page") // TODO: add stats page if we want to
             }
         }
-        .padding()
     }
 }
 
