@@ -17,6 +17,8 @@ struct AddRating: View {
     
     @Environment(\.modelContext) var modelContext;
     
+    @Binding var navigationPath: NavigationPath;
+    
     @State private var position = MapCameraPosition.userLocation(fallback: MapCameraPosition.automatic);
     @State private var confirmedLocation: SearchResult? = nil;
     @State private var userRegion: MKCoordinateRegion = MKCoordinateRegion(
@@ -25,23 +27,24 @@ struct AddRating: View {
         )
 
     var body: some View {
-        Text("Rate a spot")
-            .font(.title)
-            .fontWeight(.bold)
-        ZStack {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.thinMaterial)
-                .shadow(radius: 8, y: 5.0)
-            MapSearchSheet(currentMapRegion: $userRegion, selectedLocation: $confirmedLocation)
-            
+        ScrollView {
+            Text("Rate a spot")
+                .font(.title)
+                .fontWeight(.bold)
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.thinMaterial)
+                    .shadow(radius: 8, y: 5.0)
+                MapSearchSheet(currentMapRegion: $userRegion, selectedLocation: $confirmedLocation)
+                
+            }
+            .padding([.bottom, .trailing, .leading])
+            .frame(minHeight: 300, maxHeight: 500)
+            // display remaining rating options once a spot has been chosen
+            if (confirmedLocation != nil) {
+                FinalRatingSubmission(confirmedLocation: confirmedLocation, modelContext: modelContext, path: $navigationPath)
+            }
         }
-        .padding([.bottom, .trailing, .leading])
-        .frame(maxHeight: 350)
-        // display remaining rating options once a spot has been chosen
-        if (confirmedLocation != nil) {
-            FinalRatingSubmission(confirmedLocation: confirmedLocation, modelContext: modelContext)
-        }
-        Spacer()
     }
 }
 
@@ -125,6 +128,8 @@ struct FinalRatingSubmission : View {
     var confirmedLocation: SearchResult?;
     var modelContext: ModelContext;
     
+    @Binding var path: NavigationPath;
+    
     // state variabels for each rating type
     @State private var studyVibe: Double = 5;
     @State private var foodAndDrinkRating: Double = 5;
@@ -179,7 +184,8 @@ struct FinalRatingSubmission : View {
                     overallRating: overallRating
                 )
                 // insert new rating into model
-                modelContext.insert(newRating); // TODO: navigate back to previous navigation item
+                modelContext.insert(newRating);
+                path.removeLast();
             }) {
                 Text("Create Rating")
             }
@@ -215,5 +221,6 @@ struct RatingSlider : View {
 }
 
 #Preview {
-    AddRating()
+//    AddRating()
+    ContentView()
 }

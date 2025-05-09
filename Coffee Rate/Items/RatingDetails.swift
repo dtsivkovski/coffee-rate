@@ -74,7 +74,7 @@ struct RatingDetails: View {
                     .shadow(radius: 6, y: 4)
                 Circle().fill(Gradient(colors: [circleBackgroundColor]))
                     .frame(height: 80)
-                Text("\(rating.overallRating.formatted())")
+                Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1)))")
                     .font(.title)
                     .fontWeight(.semibold)
                     .shadow(radius:1, y: 2)
@@ -211,5 +211,5 @@ struct MapPreview : View {
 }
 
 #Preview {
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.7, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"))
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"))
 }

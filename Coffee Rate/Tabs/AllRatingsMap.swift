@@ -13,7 +13,7 @@ struct AllRatingsMap: View {
     
     @Environment(\.modelContext) var modelContext;
     @Query var ratings: [Rating];
-    @State private var navigationPath = NavigationPath();
+    @State private var navigationPath: NavigationPath = NavigationPath();
     
     func getTintFromRating(overallRating: Double) -> Color {
         if (overallRating > 7.0) {
@@ -55,7 +55,7 @@ struct AllRatingsMap: View {
                                 Circle()
                                     .fill(getTintFromRating(overallRating: rating.overallRating).opacity(0.7))
                                     .frame(width: 50, height: 50)
-                                Text("\(rating.overallRating.formatted())")
+                                Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1)))")
                                     .font(.headline)
                                     .foregroundColor(.white)
                             }
@@ -67,6 +67,16 @@ struct AllRatingsMap: View {
                 }
                 
             }
+            // navbar path items
+            .navigationDestination(for: String.self) { _ in
+                // path to add a new rating
+                AddRating(navigationPath: $navigationPath)
+            }
+            .navigationDestination(for: Rating.self) { rating in
+                // path to get details for a rating
+                RatingDetails(rating: rating)
+            }
+            .navigationTitle("Your Ratings")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(value: "Add Rating") {
@@ -74,13 +84,6 @@ struct AllRatingsMap: View {
                     }
                 }
             }
-            .navigationTitle("Your Ratings")
-        }
-        .navigationDestination(for: String.self) { _ in
-            AddRating() // TODO: add path parameter to AddRating
-        }
-        .navigationDestination(for: Rating.self) { rating in
-            RatingDetails(rating: rating)
         }
     }
 }
