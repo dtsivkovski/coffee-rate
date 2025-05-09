@@ -136,6 +136,8 @@ struct FinalRatingSubmission : View {
     @State private var availability: Double = 3;
     @State private var noiseLevel: Double = 1;
     
+    @State private var comments: String = "";
+    
     // function to get corresponding string of noise level
     func getNoiseLevelString(noiseLevel: Int) -> String {
         switch (NoiseLevel(rawValue: noiseLevel)) {
@@ -164,6 +166,11 @@ struct FinalRatingSubmission : View {
                     RatingSlider(rating: $availability, outOf: 5, icon: "person.2.fill", label: "Availability", valueLabel: "\(availability.formatted())/5")
                     // noise level rating slider
                     RatingSlider(rating: $noiseLevel, outOf: 2, icon: "waveform", label: "Noise Level", valueLabel: "\(getNoiseLevelString(noiseLevel: Int(noiseLevel)))")
+                    Text("Notes")
+                        .fontWeight(.semibold)
+                    TextEditor(text: $comments)
+                        .frame(minHeight: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }.padding()
             }
             // button to submit the rating
@@ -181,7 +188,8 @@ struct FinalRatingSubmission : View {
                     foodOrDrinkRating: Int(foodAndDrinkRating),
                     noiseLevel: NoiseLevel(rawValue: Int(noiseLevel))!,
                     availability: Int(availability),
-                    overallRating: overallRating
+                    overallRating: overallRating,
+                    comments: comments == "" ? nil : comments
                 )
                 // insert new rating into model
                 modelContext.insert(newRating);
