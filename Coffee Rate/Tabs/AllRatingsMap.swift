@@ -12,6 +12,7 @@ import SwiftData
 struct AllRatingsMap: View {
     
     @Environment(\.modelContext) var modelContext;
+    @Environment(\.colorScheme) var colorScheme;
     @Query var ratings: [Rating];
     @State private var navigationPath: NavigationPath = NavigationPath();
     
@@ -22,7 +23,7 @@ struct AllRatingsMap: View {
         else if (overallRating < 3.5) {
             return .red;
         }
-        return .yellow;
+        return .yellow.mix(with: .black, by: 0.05);
     }
     
     var body: some View {
@@ -50,14 +51,16 @@ struct AllRatingsMap: View {
                             // content of the annotation
                             ZStack {
                                 Circle()
-                                    .fill(.thinMaterial)
+                                    .fill(.thickMaterial)
                                     .frame(width: 60, height: 60)
+                                    .shadow(radius: 4, y: 4)
                                 Circle()
-                                    .fill(getTintFromRating(overallRating: rating.overallRating).opacity(0.7))
+                                    .fill(getTintFromRating(overallRating: rating.overallRating).opacity(0.8))
                                     .frame(width: 50, height: 50)
                                 Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1)))")
                                     .font(.headline)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(colorScheme == .dark ? .black : .white)
+                                    .shadow(radius: 1, y: 2)
                             }
                             .onTapGesture {
                                 navigationPath.append(rating);
