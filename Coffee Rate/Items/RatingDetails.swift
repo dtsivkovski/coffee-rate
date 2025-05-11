@@ -15,6 +15,9 @@ struct RatingDetails: View {
     @Environment(\.colorScheme) var colorScheme;
     @Query var ratings: [Rating];
     var rating : Rating;
+    @Binding var navigationPath: NavigationPath;
+    
+    @State private var deleteAlertPresented: Bool = false;
     
     // gets the index for the rating position
     // TODO: use when editing (to know which one needs to be changed in the modelContext)
@@ -86,7 +89,7 @@ struct RatingDetails: View {
                 Text(rating.name)
                     .font(.title)
                     .fontWeight(.bold)
-                Text("Visited on \(rating.whenVisited, style: .date)")
+                Text("Rated on \(rating.whenVisited, style: .date)")
                     .font(.subheadline)
                     .padding(.bottom, 8)
                 // z stack containing background rectangle and the individual ratings
@@ -125,26 +128,38 @@ struct RatingDetails: View {
                             .padding(16)
                     }.padding(.top, 10)
                 }
-                HStack {
-                    // TODO: finish button function
-                    Button(action: {}) {
-                        Spacer()
-                        Text("Edit")
-                        Spacer()
-                    }
-                    .buttonStyle(BorderedButtonStyle())
-                    .shadow(radius: 6, y: 5.0)
-                    // TODO: finish button function
-                    Button(action: {}) {
-                        Spacer()
-                        Text("Share")
-                        Spacer()
-                    }
-                    .buttonStyle(BorderedProminentButtonStyle())
-                    .shadow(radius: 8, y: 5.0)
-                }.padding(.top, 10)
             }
-            .padding([.leading, .trailing], 20)
+            .padding([.leading, .trailing, .bottom], 20)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    // present the deletion warning
+                    deleteAlertPresented = true;
+                }) {
+                    Image(systemName: "trash")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(action: {
+                    // implement share feature
+                }) {
+                    Image(systemName: "square.and.arrow.up")
+                }
+            }
+        }
+        // create alert for deletion of rating
+        .alert(isPresented: $deleteAlertPresented) {
+            Alert(
+                title: Text("Delete this rating"),
+                message: Text("Are you sure that you want to delete this rating? This cannot be undone."),
+                primaryButton: .destructive(Text("Delete")) {
+                    // remove rating from model and update path to previous
+                    modelContext.delete(rating);
+                    navigationPath.removeLast();
+                },
+                secondaryButton: .cancel()
+            )
         }
     }
 }
@@ -211,5 +226,6 @@ struct MapPreview : View {
 }
 
 #Preview {
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"))
+    @Previewable @State var navPath = NavigationPath();
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navPath)
 }

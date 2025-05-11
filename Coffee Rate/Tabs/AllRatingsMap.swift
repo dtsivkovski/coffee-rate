@@ -77,7 +77,7 @@ struct AllRatingsMap: View {
             }
             .navigationDestination(for: Rating.self) { rating in
                 // path to get details for a rating
-                RatingDetails(rating: rating)
+                RatingDetails(rating: rating, navigationPath: $navigationPath)
             }
             .navigationTitle("Your Ratings")
             .toolbar {
