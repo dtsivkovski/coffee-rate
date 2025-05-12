@@ -17,6 +17,8 @@ struct AddRating: View {
     
     @Environment(\.modelContext) var modelContext;
     
+    @Binding var navigationPath: NavigationPath;
+    
     @State private var position = MapCameraPosition.userLocation(fallback: MapCameraPosition.automatic);
     @State private var confirmedLocation: SearchResult? = nil;
     @State private var userRegion: MKCoordinateRegion = MKCoordinateRegion(
@@ -25,23 +27,24 @@ struct AddRating: View {
         )
 
     var body: some View {
-        Text("Rate a spot")
-            .font(.title)
-            .fontWeight(.bold)
-        ZStack {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.thinMaterial)
-                .shadow(radius: 8, y: 5.0)
-            MapSearchSheet(currentMapRegion: $userRegion, selectedLocation: $confirmedLocation)
-            
+        ScrollView {
+            Text("Rate a spot")
+                .font(.title)
+                .fontWeight(.bold)
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.thinMaterial)
+                    .shadow(radius: 8, y: 5.0)
+                MapSearchSheet(currentMapRegion: $userRegion, selectedLocation: $confirmedLocation)
+                
+            }
+            .padding([.bottom, .trailing, .leading])
+            .frame(minHeight: 300, maxHeight: 500)
+            // display remaining rating options once a spot has been chosen
+            if (confirmedLocation != nil) {
+                FinalRatingSubmission(confirmedLocation: confirmedLocation, modelContext: modelContext, path: $navigationPath)
+            }
         }
-        .padding([.bottom, .trailing, .leading])
-        .frame(maxHeight: 350)
-        // display remaining rating options once a spot has been chosen
-        if (confirmedLocation != nil) {
-            FinalRatingSubmission(confirmedLocation: confirmedLocation, modelContext: modelContext)
-        }
-        Spacer()
     }
 }
 
@@ -125,11 +128,15 @@ struct FinalRatingSubmission : View {
     var confirmedLocation: SearchResult?;
     var modelContext: ModelContext;
     
+    @Binding var path: NavigationPath;
+    
     // state variabels for each rating type
     @State private var studyVibe: Double = 5;
     @State private var foodAndDrinkRating: Double = 5;
     @State private var availability: Double = 3;
     @State private var noiseLevel: Double = 1;
+    
+    @State private var comments: String = "";
     
     // function to get corresponding string of noise level
     func getNoiseLevelString(noiseLevel: Int) -> String {
@@ -159,12 +166,17 @@ struct FinalRatingSubmission : View {
                     RatingSlider(rating: $availability, outOf: 5, icon: "person.2.fill", label: "Availability", valueLabel: "\(availability.formatted())/5")
                     // noise level rating slider
                     RatingSlider(rating: $noiseLevel, outOf: 2, icon: "waveform", label: "Noise Level", valueLabel: "\(getNoiseLevelString(noiseLevel: Int(noiseLevel)))")
+                    Text("Notes")
+                        .fontWeight(.semibold)
+                    TextEditor(text: $comments)
+                        .frame(minHeight: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }.padding()
             }
             // button to submit the rating
             Button(action: {
                 // calculate overall rating
-                let overallRating : Double = (studyVibe + foodAndDrinkRating + (noiseLevel / 3) * 10 + availability * 2) / 40;
+                let overallRating : Double = (studyVibe + foodAndDrinkRating + (availability * 2)) / 3;
                 // create new rating
                 let newRating = Rating(
                     id: UUID(),
@@ -176,10 +188,12 @@ struct FinalRatingSubmission : View {
                     foodOrDrinkRating: Int(foodAndDrinkRating),
                     noiseLevel: NoiseLevel(rawValue: Int(noiseLevel))!,
                     availability: Int(availability),
-                    overallRating: overallRating
+                    overallRating: overallRating,
+                    comments: comments == "" ? nil : comments
                 )
                 // insert new rating into model
-                modelContext.insert(newRating); // TODO: navigate back to previous navigation item
+                modelContext.insert(newRating);
+                path.removeLast();
             }) {
                 Text("Create Rating")
             }
@@ -215,5 +229,6 @@ struct RatingSlider : View {
 }
 
 #Preview {
-    AddRating()
+//    AddRating()
+    ContentView()
 }
