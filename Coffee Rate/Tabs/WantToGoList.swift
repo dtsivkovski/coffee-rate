@@ -66,8 +66,8 @@ struct ListCell: View {
             Image(systemName: "cup.and.saucer.fill")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 60, height: 50)
-                .padding(20)
+                .frame(width: 50, height: 50)
+                .padding(.trailing, 10)
             Text(item.name)
                 .font(.title2)
         }
