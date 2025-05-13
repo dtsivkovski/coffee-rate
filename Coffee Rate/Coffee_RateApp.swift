@@ -12,8 +12,18 @@ import SwiftData
 struct Coffee_RateApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
-        }
-        .modelContainer(for: Rating.self)
+//            NavigationStack{
+                ContentView()
+                
+//                WantToGoView(item: WantToGoItem(name: "Long Dog Coffee", hasVisited: false, latitude: 33.788187, longitude: -117.851938))
+//                
+//                WantToGoList(items: [
+//                    WantToGoItem(name: "Long Dog Coffee and Treats", hasVisited: false, latitude: 33.789180, longitude: -117.853625),
+//                    WantToGoItem(name: "Contra", hasVisited: false, latitude: 33.789180, longitude: -117.853625)
+//                ])
+            }
+//        }
+        .modelContainer(for: [Rating.self, WantToGoItem.self])
+        //.modelContainer(for: Rating.self)
     }
 }
