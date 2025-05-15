@@ -32,7 +32,7 @@ struct ContentView: View {
                 Favorites()
             }
             Tab("My Stats", systemImage: "person.crop.circle", value: 4) {
-                Text("Stats page") // TODO: add stats page if we want to
+                StatsView()
             }
         }
     }
