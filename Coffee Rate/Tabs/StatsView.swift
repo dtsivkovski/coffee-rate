@@ -17,13 +17,9 @@ struct StatsView: View {
     
     // average overall rating
     private var averageRating: Double {
-        var sum = 0.0;
-        
-        for rating in ratings {
-            sum += rating.overallRating;
-        }
-        
-        return sum / Double(ratings.count);
+        guard !ratings.isEmpty else { return 0.0 }
+        let sum = ratings.reduce(0) { $0 + $1.overallRating }
+        return sum / Double(ratings.count)
     }
     
     // total count of ratings
@@ -33,19 +29,7 @@ struct StatsView: View {
     
     // highest rating for all ratings
     private var highestRating: Rating? {
-        if ratings.count == 0 { return nil } // if no ratings
-        
-        var max = 0.0;
-        var highestRating: Rating = ratings[0];
-        
-        for rating in ratings {
-            if (rating.overallRating > max) {
-                highestRating = rating;
-                max = rating.overallRating;
-            }
-        }
-        
-        return highestRating;
+        ratings.max { $0.overallRating < $1.overallRating }
     }
     
     var body: some View {
@@ -117,11 +101,11 @@ struct StatItem: View {
 
 struct TopRatingPreview: View {
     
-    
     @Environment(\.colorScheme) var colorScheme;
     @Binding var navigationPath: NavigationPath;
     var rating: Rating;
     
+    // get color for the circle rating value
     var circleBackgroundColor : Color {
         get {
             if (colorScheme == .dark) {
@@ -154,7 +138,7 @@ struct TopRatingPreview: View {
                     .fontWeight(.semibold)
                     .padding(.bottom, 2)
                 
-                NavigationLink(value: rating) {
+                NavigationLink(value: rating) { // rating link
                     HStack {
                         ZStack {
                             Circle()
