@@ -22,6 +22,7 @@ class Rating: Identifiable {
     // Coffee Shop Data
     var name: String;
     var whenVisited: Date;
+    var isFavorited: Bool
     private var latitude: Double?
     private var longitude: Double?
     
@@ -52,6 +53,7 @@ class Rating: Identifiable {
         latitude: Double? = nil,
         longitude: Double? = nil,
         whenVisited: Date,
+        isFavorited: Bool,
         studyVibe: Int,
         foodOrDrinkRating: Int,
         noiseLevel: NoiseLevel,
@@ -64,6 +66,7 @@ class Rating: Identifiable {
         self.latitude = latitude;
         self.longitude = longitude;
         self.whenVisited = whenVisited;
+        self.isFavorited = isFavorited;
         self.studyVibe = studyVibe;
         self.foodOrDrinkRating = foodOrDrinkRating;
         self.noiseLevel = noiseLevel.rawValue;

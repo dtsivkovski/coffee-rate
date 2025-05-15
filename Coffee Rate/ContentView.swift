@@ -29,10 +29,10 @@ struct ContentView: View {
                 AllRatingsMap()
             }
             Tab("Favorites", systemImage: "star", value: 3) {
-                Favorites()
+                Favorites()//allRatings: ratings)
             }
             Tab("My Stats", systemImage: "person.crop.circle", value: 4) {
-                Text("Stats page") // TODO: add stats page if we want to
+                Text("Stats page") 
             }
         }
     }
@@ -40,4 +40,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        
 }

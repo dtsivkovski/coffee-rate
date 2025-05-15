@@ -85,10 +85,13 @@ struct RatingDetails: View {
             .offset(y: -80)
             .padding([.bottom], -70)
             VStack {
-                // location name
-                Text(rating.name)
-                    .font(.title)
-                    .fontWeight(.bold)
+                HStack{
+                    // location name
+                    Text(rating.name)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    FavoriteButton(isSet: Bindable(rating).isFavorited)
+                }
                 Text("Rated on \(rating.whenVisited, style: .date)")
                     .font(.subheadline)
                     .padding(.bottom, 8)
@@ -226,6 +229,7 @@ struct MapPreview : View {
 }
 
 #Preview {
+    
     @Previewable @State var navPath = NavigationPath();
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navPath)
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navPath)
 }

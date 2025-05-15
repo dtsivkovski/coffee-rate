@@ -184,6 +184,7 @@ struct FinalRatingSubmission : View {
                     latitude: confirmedLocation!.location.latitude,
                     longitude: confirmedLocation!.location.longitude,
                     whenVisited: Date(),
+                    isFavorited: false,
                     studyVibe: Int(studyVibe),
                     foodOrDrinkRating: Int(foodAndDrinkRating),
                     noiseLevel: NoiseLevel(rawValue: Int(noiseLevel))!,

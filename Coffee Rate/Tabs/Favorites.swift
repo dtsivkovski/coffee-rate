@@ -6,13 +6,35 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct Favorites: View {
+    @Environment(\.modelContext) var modelContext
+    @Query var ratings: [Rating]
+    @State private var navigationPath = NavigationPath()
+    
+    var filteredRatings: [Rating] {
+            ratings.filter { rating in
+               rating.isFavorited
+            }
+        }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationSplitView {
+            List(filteredRatings) { rating in
+                NavigationLink {
+                    RatingDetails(rating: rating, navigationPath: $navigationPath)
+                } label: {
+                    RatingListCell(rating: rating)
+                }
+            }
+            .navigationTitle("Favorites")
+        } detail: {
+            Text("Select a Coffee Shop")
+        }
     }
 }
 
-#Preview {
-    Favorites()
-}
+    #Preview {
+        Favorites()
+    }
