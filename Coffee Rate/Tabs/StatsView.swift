@@ -102,6 +102,7 @@ struct StatItem: View {
             Circle()
                 .foregroundStyle(.thinMaterial.shadow(.inner(color: .black.opacity(0.2),radius: 4, y: 5)))
             VStack {
+                // labels for stat item
                 Text(value.formatted(.number.rounded(increment: rounded ? 1 : 0.1)))
                     .font(.largeTitle)
                     .shadow(radius: 1, y: 2)
