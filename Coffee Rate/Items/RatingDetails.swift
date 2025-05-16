@@ -18,6 +18,7 @@ struct RatingDetails: View {
     var rating : Rating;
     
     @State private var deleteAlertPresented: Bool = false;
+    @Binding var navigationPath: NavigationPath;
     
     // gets the index for the rating position
     // TODO: use when editing (to know which one needs to be changed in the modelContext)
@@ -160,7 +161,11 @@ struct RatingDetails: View {
                 primaryButton: .destructive(Text("Delete")) {
                     // remove rating from model and update path to previous
                     modelContext.delete(rating);
-                    dismiss()
+                    if (navigationPath.count > 0) {
+                        navigationPath.removeLast() // remove last if navigationpath is valid
+                    } else {
+                        dismiss() // dismisses the presentation
+                    }
                 },
                 secondaryButton: .cancel()
             )
@@ -230,5 +235,6 @@ struct MapPreview : View {
 }
 
 #Preview {
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"))
+    @Previewable @State var navigationPath: NavigationPath = NavigationPath();
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navigationPath)
 }

@@ -17,6 +17,8 @@ struct AddRating: View {
     
     @Environment(\.modelContext) var modelContext;
     
+    @Binding var navigationPath: NavigationPath;
+    
     @State private var position = MapCameraPosition.userLocation(fallback: MapCameraPosition.automatic);
     @State private var confirmedLocation: SearchResult? = nil;
     @State private var userRegion: MKCoordinateRegion = MKCoordinateRegion(
@@ -40,7 +42,7 @@ struct AddRating: View {
             .frame(minHeight: 300, maxHeight: 500)
             // display remaining rating options once a spot has been chosen
             if (confirmedLocation != nil) {
-                FinalRatingSubmission(confirmedLocation: confirmedLocation, modelContext: modelContext)
+                FinalRatingSubmission(navigationPath: $navigationPath, confirmedLocation: confirmedLocation, modelContext: modelContext)
             }
         }
     }
@@ -124,6 +126,7 @@ struct FinalRatingSubmission : View {
     
     // dismiss variable once added
     @Environment(\.dismiss) var dismiss;
+    @Binding var navigationPath: NavigationPath;
     
     // include search result and model context
     var confirmedLocation: SearchResult?;
@@ -193,7 +196,11 @@ struct FinalRatingSubmission : View {
                 )
                 // insert new rating into model
                 modelContext.insert(newRating);
-                dismiss() // dismisses the presentation
+                if (navigationPath.count > 0) {
+                    navigationPath.removeLast() // remove last if navigationpath is valid
+                } else {
+                    dismiss() // dismisses the presentation
+                }
             }) {
                 Text("Create Rating")
             }

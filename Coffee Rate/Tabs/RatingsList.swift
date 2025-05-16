@@ -37,12 +37,12 @@ struct RatingsList: View {
             .navigationTitle("All Ratings")
             // rating navigation
             .navigationDestination(for: Rating.self) { rating in
-                RatingDetails(rating: rating)
+                RatingDetails(rating: rating, navigationPath: $navigationPath)
             }
             // add rating navigaiton
             .navigationDestination(for: String.self) { value in
                 if value == "Add Rating" {
-                    AddRating()
+                    AddRating(navigationPath: $navigationPath)
                 }
             }
             .toolbar{

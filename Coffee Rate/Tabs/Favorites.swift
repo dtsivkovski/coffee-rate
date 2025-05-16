@@ -23,7 +23,7 @@ struct Favorites: View {
         NavigationSplitView {
             List(filteredRatings) { rating in
                 NavigationLink {
-                    RatingDetails(rating: rating)
+                    RatingDetails(rating: rating, navigationPath: $navigationPath)
                 } label: {
                     RatingListCell(rating: rating)
                 }
