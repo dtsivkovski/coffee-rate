@@ -9,46 +9,96 @@ import SwiftUI
 import SwiftData
 
 struct RatingsList: View {
+    
     @Environment(\.modelContext) var modelContext
     @Query var ratings: [Rating]
     @State private var navigationPath = NavigationPath()
+    
+    // variable for search
+    @State private var searchText: String = ""
+    
+    // deletion values
+    @State private var itemsToDelete: IndexSet?
+    @State private var showingDeleteAlert = false;
     
     var body: some View {
         Text("Logo Linking to All Ratings Map Here") //replace with header + logo
             .padding()
 
         NavigationSplitView {
-            List(ratings) { rating in
-                NavigationLink {
-                    RatingDetails(rating: rating, navigationPath: $navigationPath)
-                } label: {
-                    RatingListCell(rating: rating)
+            List {
+                ForEach(filteredRatings) { rating in
+                    NavigationLink(value: rating) {
+                        RatingListCell(rating: rating)
+                    }
                 }
+                .onDelete(perform: confirmDelete)
             }
             .navigationTitle("All Ratings")
-            .toolbar{
-                Button(action: addShop) {
-                    Image(systemName: "plus.circle")
-                        .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
+            // rating navigation
+            .navigationDestination(for: Rating.self) { rating in
+                RatingDetails(rating: rating)
+            }
+            // add rating navigaiton
+            .navigationDestination(for: String.self) { value in
+                if value == "Add Rating" {
+                    AddRating()
                 }
+            }
+            .toolbar{
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(value: "Add Rating") {
+                        Image(systemName: "plus.circle")
+                            .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
+                    }
+                }
+            }
+            .searchable(text: $searchText, prompt: "Search Ratings")
+            // alert for deletion
+            .alert("Delete this rating", isPresented: $showingDeleteAlert, presenting: itemsToDelete) { indices in
+                Button("Delete", role: .destructive) {
+                    // if deletion is followed through with then delete
+                    deleteItems(at: indices)
+                    itemsToDelete = nil
+                    showingDeleteAlert = false
+                }
+                Button("Cancel", role: .cancel) {
+                    // if cancelled reset vars
+                    itemsToDelete = nil
+                    showingDeleteAlert = false
+                }
+            } message: { indices in
+                Text("Are you sure that you want to delete this rating? This cannot be undone.")
             }
         } detail: {
             Text("Select a Coffee Shop")
         }
         
         
-        
     }//end of body
-    func deleteItems(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(ratings[index])
+    
+    // filter all ratings by search text
+    var filteredRatings: [Rating] {
+        if (searchText.isEmpty) {
+            return ratings;
+        } else {
+            return ratings.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
-    // will need to navigate this to the AddRating view
-    func addShop(){
-        let newShop = Rating(name: "Long Dog",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 8.712341234, comments: "Super cute inside!")
-        modelContext.insert(newShop)
+    func confirmDelete(at offsets: IndexSet) {
+        // set items to be deleted and show alert
+        itemsToDelete = offsets;
+        showingDeleteAlert = true;
+    }
+    
+    func deleteItems(at offsets: IndexSet) {
+        for offset in offsets {
+            // get offsets from filtered ratings (in case deleting from searched list)
+            guard offset < filteredRatings.count else { continue } // don't delete if outside of length of filtered items
+            let ratingToDelete = filteredRatings[offset]
+            modelContext.delete(ratingToDelete) // delete correct rating
+        }
     }
     
 }

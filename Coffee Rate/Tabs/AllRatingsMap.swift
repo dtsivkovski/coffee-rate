@@ -73,11 +73,11 @@ struct AllRatingsMap: View {
             // navbar path items
             .navigationDestination(for: String.self) { _ in
                 // path to add a new rating
-                AddRating(navigationPath: $navigationPath)
+                AddRating()
             }
             .navigationDestination(for: Rating.self) { rating in
                 // path to get details for a rating
-                RatingDetails(rating: rating, navigationPath: $navigationPath)
+                RatingDetails(rating: rating)
             }
             .navigationTitle("Your Ratings")
             .toolbar {

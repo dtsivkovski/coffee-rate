@@ -11,11 +11,11 @@ import MapKit
 
 struct RatingDetails: View {
     
+    @Environment(\.dismiss) var dismiss;
     @Environment(\.modelContext) var modelContext;
     @Environment(\.colorScheme) var colorScheme;
     @Query var ratings: [Rating];
     var rating : Rating;
-    @Binding var navigationPath: NavigationPath;
     
     @State private var deleteAlertPresented: Bool = false;
     
@@ -160,7 +160,7 @@ struct RatingDetails: View {
                 primaryButton: .destructive(Text("Delete")) {
                     // remove rating from model and update path to previous
                     modelContext.delete(rating);
-                    navigationPath.removeLast();
+                    dismiss()
                 },
                 secondaryButton: .cancel()
             )
@@ -230,7 +230,5 @@ struct MapPreview : View {
 }
 
 #Preview {
-    
-    @Previewable @State var navPath = NavigationPath();
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navPath)
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"))
 }
