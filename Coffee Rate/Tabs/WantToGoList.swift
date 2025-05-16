@@ -24,7 +24,7 @@ struct WantToGoList: View {
                 ForEach(items){ item in
                     //replace VStack with ListCell and maybe ZStack with rounded rectangle
                     NavigationLink(value: item){
-                        ListCell(item :item)
+                        ListCell(item: item)
                     }
                 } //end of ForEach
                 .onDelete(perform: deleteItems)

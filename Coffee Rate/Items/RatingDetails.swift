@@ -11,13 +11,14 @@ import MapKit
 
 struct RatingDetails: View {
     
+    @Environment(\.dismiss) var dismiss;
     @Environment(\.modelContext) var modelContext;
     @Environment(\.colorScheme) var colorScheme;
     @Query var ratings: [Rating];
     var rating : Rating;
-    @Binding var navigationPath: NavigationPath;
     
     @State private var deleteAlertPresented: Bool = false;
+    @Binding var navigationPath: NavigationPath;
     
     // gets the index for the rating position
     // TODO: use when editing (to know which one needs to be changed in the modelContext)
@@ -86,10 +87,14 @@ struct RatingDetails: View {
             .offset(y: -80)
             .padding([.bottom], -70)
             VStack {
-                // location name
-                Text(rating.name)
-                    .font(.title)
-                    .fontWeight(.bold)
+                HStack{
+                    // location name
+                    Text(rating.name)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    FavoriteButton(isSet: Bindable(rating).isFavorited)
+                        .frame(width: 40)
+                }
                 Text("Rated on \(rating.whenVisited, style: .date)")
                     .font(.subheadline)
                     .padding(.bottom, 8)
@@ -157,7 +162,11 @@ struct RatingDetails: View {
                 primaryButton: .destructive(Text("Delete")) {
                     // remove rating from model and update path to previous
                     modelContext.delete(rating);
-                    navigationPath.removeLast();
+                    if (navigationPath.count > 0) {
+                        navigationPath.removeLast() // remove last if navigationpath is valid
+                    } else {
+                        dismiss() // dismisses the presentation
+                    }
                 },
                 secondaryButton: .cancel()
             )
@@ -227,6 +236,6 @@ struct MapPreview : View {
 }
 
 #Preview {
-    @Previewable @State var navPath = NavigationPath();
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navPath)
+    @Previewable @State var navigationPath: NavigationPath = NavigationPath();
+    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navigationPath)
 }

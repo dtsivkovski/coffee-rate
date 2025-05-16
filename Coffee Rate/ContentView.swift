@@ -29,7 +29,7 @@ struct ContentView: View {
                 AllRatingsMap()
             }
             Tab("Favorites", systemImage: "star", value: 3) {
-                Favorites()
+                Favorites()//allRatings: ratings)
             }
             Tab("My Stats", systemImage: "person.crop.circle", value: 4) {
                 StatsView()
@@ -40,4 +40,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        
 }

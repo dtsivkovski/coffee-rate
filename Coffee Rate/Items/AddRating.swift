@@ -42,7 +42,7 @@ struct AddRating: View {
             .frame(minHeight: 300, maxHeight: 500)
             // display remaining rating options once a spot has been chosen
             if (confirmedLocation != nil) {
-                FinalRatingSubmission(confirmedLocation: confirmedLocation, modelContext: modelContext, path: $navigationPath)
+                FinalRatingSubmission(navigationPath: $navigationPath, confirmedLocation: confirmedLocation, modelContext: modelContext)
             }
         }
     }
@@ -124,11 +124,13 @@ struct MapSearchSheet : View {
 
 struct FinalRatingSubmission : View {
     
+    // dismiss variable once added
+    @Environment(\.dismiss) var dismiss;
+    @Binding var navigationPath: NavigationPath;
+    
     // include search result and model context
     var confirmedLocation: SearchResult?;
     var modelContext: ModelContext;
-    
-    @Binding var path: NavigationPath;
     
     // state variabels for each rating type
     @State private var studyVibe: Double = 5;
@@ -184,6 +186,7 @@ struct FinalRatingSubmission : View {
                     latitude: confirmedLocation!.location.latitude,
                     longitude: confirmedLocation!.location.longitude,
                     whenVisited: Date(),
+                    isFavorited: false,
                     studyVibe: Int(studyVibe),
                     foodOrDrinkRating: Int(foodAndDrinkRating),
                     noiseLevel: NoiseLevel(rawValue: Int(noiseLevel))!,
@@ -193,7 +196,11 @@ struct FinalRatingSubmission : View {
                 )
                 // insert new rating into model
                 modelContext.insert(newRating);
-                path.removeLast();
+                if (navigationPath.count > 0) {
+                    navigationPath.removeLast() // remove last if navigationpath is valid
+                } else {
+                    dismiss() // dismisses the presentation
+                }
             }) {
                 Text("Create Rating")
             }
