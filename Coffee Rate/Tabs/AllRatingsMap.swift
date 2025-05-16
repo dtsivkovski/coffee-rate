@@ -79,7 +79,8 @@ struct AllRatingsMap: View {
                 // path to get details for a rating
                 RatingDetails(rating: rating, navigationPath: $navigationPath)
             }
-            .navigationTitle("Your Ratings")
+            .navigationSplitViewStyle(AutomaticNavigationSplitViewStyle())
+            .navigationTitle("Your Map")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(value: "Add Rating") {

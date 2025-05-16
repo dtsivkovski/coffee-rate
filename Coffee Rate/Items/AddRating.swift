@@ -193,7 +193,11 @@ struct FinalRatingSubmission : View {
                 )
                 // insert new rating into model
                 modelContext.insert(newRating);
-                path.removeLast();
+                if (path.count > 0) {
+                    path.removeLast();
+                } else {
+                    path.append(newRating);
+                }
             }) {
                 Text("Create Rating")
             }
