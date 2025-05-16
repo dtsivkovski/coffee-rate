@@ -91,6 +91,7 @@ struct RatingDetails: View {
                         .font(.title)
                         .fontWeight(.bold)
                     FavoriteButton(isSet: Bindable(rating).isFavorited)
+                        .frame(width: 40)
                 }
                 Text("Rated on \(rating.whenVisited, style: .date)")
                     .font(.subheadline)

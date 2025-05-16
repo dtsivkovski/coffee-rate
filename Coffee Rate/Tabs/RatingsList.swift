@@ -26,18 +26,16 @@ struct RatingsList: View {
                 }
             }
             .navigationTitle("All Ratings")
+            .toolbar{
+                Button(action: addShop) {
+                    Image(systemName: "plus.circle")
+                        .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
+                }
+            }
         } detail: {
             Text("Select a Coffee Shop")
         }
-    
-            .toolbar{
-                Button(action: addShop) {
-                    Image(systemName: "rectangle.stack.fill.badge.plus")
-                        .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
-                }
-                .buttonStyle(.bordered)
-                .background(Color.white)
-            }
+        
         
         
     }//end of body
@@ -56,7 +54,32 @@ struct RatingsList: View {
 }
 
 struct RatingListCell: View {
+    
+    @Environment(\.colorScheme) var colorScheme;
+    
     var rating: Rating
+    
+    // get color for the circle rating value
+    var circleBackgroundColor : Color {
+        get {
+            if (colorScheme == .dark) {
+                if (rating.overallRating > 7.0) {
+                    return Color(red: 50/256, green: 150/256, blue: 50/256)
+                } else if (rating.overallRating < 3.5) {
+                    return Color(red: 150/256, green: 50/256, blue: 50/256)
+                } else {
+                    return .yellow.mix(with: .red, by: 0.3).mix(with: .black, by: 0.05);
+                }
+            }
+            if (rating.overallRating > 7.0) {
+                return Color(red: 50/256, green: 160/256, blue: 50/256)
+            } else if (rating.overallRating < 3.5) {
+                return Color(red: 200/256, green: 50/256, blue: 50/256)
+            } else {
+                return .yellow.mix(with: .red, by: 0.3).mix(with: .black, by: 0.05);
+            }
+        }
+    }
     
     var body: some View{
         HStack{
@@ -64,10 +87,15 @@ struct RatingListCell: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
-                .padding(.trailing, 10)
-            Text(rating.name)
-                .font(.title2)
-                
+                .foregroundStyle(circleBackgroundColor)
+                .shadow(color: .black.opacity(0.2), radius: 1, y: 2)
+            .padding(.trailing, 10)
+            VStack (alignment: .leading) {
+                Text(rating.name)
+                    .fontWeight(.medium)
+                Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1))) / 10")
+                    .foregroundStyle(.secondary)
+            }
             Spacer()
             
             if rating.isFavorited {
@@ -107,7 +135,7 @@ enum PreviewData {
       foodOrDrinkRating: 9,
       noiseLevel: .normal,
       availability: 3,
-      overallRating: 8.2,
+      overallRating: 2.5,
       comments: "Cozy spot with great lattes!"
     )
     let sample2 = Rating(
