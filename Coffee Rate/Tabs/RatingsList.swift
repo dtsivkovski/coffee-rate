@@ -15,14 +15,14 @@ struct RatingsList: View {
     @State private var navigationPath = NavigationPath()
     
     // variable for search
-    @State private var searchText: String = ""
+    @State private var searchText: String = "";
     
     // deletion values
-    @State private var itemsToDelete: IndexSet?
+    @State private var itemToDelete: Rating? = nil;
     @State private var showingDeleteAlert = false;
     
     var body: some View {
-        Text("Logo Linking to All Ratings Map Here") //replace with header + logo
+        Text("Logo goes here") //replace with header + logo
             .padding()
 
         NavigationSplitView {
@@ -31,8 +31,28 @@ struct RatingsList: View {
                     NavigationLink(value: rating) {
                         RatingListCell(rating: rating)
                     }
+                    .swipeActions {
+                        Button("Delete") {
+                            self.itemToDelete = rating
+                            showingDeleteAlert = true
+                        }
+                        .tint(.red)
+                    }
                 }
-                .onDelete(perform: confirmDelete)
+                .confirmationDialog(
+                    Text("Are you sure you want to delete this rating?"),
+                    isPresented: $showingDeleteAlert,
+                    titleVisibility: .visible
+                ) {
+                    Button("Delete", role: .destructive) {
+                        if let ratingToDelete = itemToDelete {
+                            withAnimation {
+                                deleteItem(ratingToDelete)
+                            }
+                        }
+                    }
+                    .tint(.red)
+                }
             }
             .navigationTitle("All Ratings")
             // rating navigation
@@ -54,27 +74,9 @@ struct RatingsList: View {
                 }
             }
             .searchable(text: $searchText, prompt: "Search Ratings")
-            // alert for deletion
-            .alert("Delete this rating", isPresented: $showingDeleteAlert, presenting: itemsToDelete) { indices in
-                Button("Delete", role: .destructive) {
-                    // if deletion is followed through with then delete
-                    deleteItems(at: indices)
-                    itemsToDelete = nil
-                    showingDeleteAlert = false
-                }
-                Button("Cancel", role: .cancel) {
-                    // if cancelled reset vars
-                    itemsToDelete = nil
-                    showingDeleteAlert = false
-                }
-            } message: { indices in
-                Text("Are you sure that you want to delete this rating? This cannot be undone.")
-            }
         } detail: {
             Text("Select a Coffee Shop")
         }
-        
-        
     }//end of body
     
     // filter all ratings by search text
@@ -86,19 +88,8 @@ struct RatingsList: View {
         }
     }
     
-    func confirmDelete(at offsets: IndexSet) {
-        // set items to be deleted and show alert
-        itemsToDelete = offsets;
-        showingDeleteAlert = true;
-    }
-    
-    func deleteItems(at offsets: IndexSet) {
-        for offset in offsets {
-            // get offsets from filtered ratings (in case deleting from searched list)
-            guard offset < filteredRatings.count else { continue } // don't delete if outside of length of filtered items
-            let ratingToDelete = filteredRatings[offset]
-            modelContext.delete(ratingToDelete) // delete correct rating
-        }
+    func deleteItem(_ rating : Rating) {
+        modelContext.delete(rating);
     }
     
 }

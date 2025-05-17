@@ -207,7 +207,7 @@ struct FinalRatingSubmission : View {
                 .padding(.top, 16)
                 .buttonStyle(BorderedProminentButtonStyle())
                 .shadow(radius: 8, y: 5.0)
-        }.padding([.top,.leading,.trailing])
+        }.padding()
     }
 }
 
