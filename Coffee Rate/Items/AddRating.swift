@@ -178,7 +178,7 @@ struct FinalRatingSubmission : View {
             // button to submit the rating
             Button(action: {
                 // calculate overall rating
-                let overallRating : Double = (studyVibe + foodAndDrinkRating + (availability * 2)) / 3;
+                let overallRating : Double = (studyVibe + foodAndDrinkRating + availability) / 2.5;
                 // create new rating
                 let newRating = Rating(
                     id: UUID(),

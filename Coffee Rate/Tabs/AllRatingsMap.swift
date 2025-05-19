@@ -57,7 +57,7 @@ struct AllRatingsMap: View {
                                 Circle()
                                     .fill(getTintFromRating(overallRating: rating.overallRating).opacity(0.8))
                                     .frame(width: 50, height: 50)
-                                Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1)))")
+                                Text("\(rating.overallRating.formatted(.number.precision(.fractionLength(0...1))))")
                                     .font(.headline)
                                     .foregroundColor(colorScheme == .dark ? .black : .white)
                                     .shadow(radius: 1, y: 2)

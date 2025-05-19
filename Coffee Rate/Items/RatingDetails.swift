@@ -79,7 +79,7 @@ struct RatingDetails: View {
                 Circle()
                     .foregroundStyle(circleBackgroundColor.shadow(.inner(color: .black.opacity(0.2),radius: 4, y: 4)))
                     .frame(height: 80)
-                Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1)))")
+                Text("\(rating.overallRating.formatted(.number.precision(.fractionLength(0...1))))")
                     .font(.title)
                     .fontWeight(.semibold)
                     .shadow(radius:1, y: 2)

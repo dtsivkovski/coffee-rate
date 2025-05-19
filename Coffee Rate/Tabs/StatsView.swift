@@ -84,10 +84,10 @@ struct StatItem: View {
     var body: some View {
         ZStack {
             Circle()
-                .foregroundStyle(.thinMaterial.shadow(.inner(color: .black.opacity(0.2),radius: 4, y: 5)))
+                .foregroundStyle(.thickMaterial.shadow(.inner(color: .black.opacity(0.3),radius: 4, y: 5)))
             VStack {
                 // labels for stat item
-                Text(value.formatted(.number.rounded(increment: rounded ? 1 : 0.1)))
+                Text(value.formatted(rounded ? .number.precision(.fractionLength(0...1)) : .number.rounded(increment: 1)))
                     .font(.largeTitle)
                     .shadow(radius: 1, y: 2)
                 Text(label)
@@ -144,7 +144,7 @@ struct TopRatingPreview: View {
                             Circle()
                                 .foregroundStyle(circleBackgroundColor.shadow(.inner(color: .black.opacity(0.2), radius: 4, y: 5)))
                                 .frame(height: 120)
-                            Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1)))")
+                            Text("\(rating.overallRating.formatted(.number.precision(.fractionLength(0...1))))")
                                 .font(.largeTitle)
                                 .shadow(radius:1, y: 2)
                         }
@@ -152,7 +152,7 @@ struct TopRatingPreview: View {
                             .font(.headline)
                             .fontWeight(.semibold)
                     }
-                }.tint(.black)
+                }.tint(.primary)
             }
             .padding(16)
         }

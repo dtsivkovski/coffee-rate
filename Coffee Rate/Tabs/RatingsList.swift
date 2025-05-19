@@ -134,7 +134,7 @@ struct RatingListCell: View {
             VStack (alignment: .leading) {
                 Text(rating.name)
                     .fontWeight(.medium)
-                Text("\(rating.overallRating.formatted(.number.rounded(increment: 0.1))) / 10")
+                Text("\(rating.overallRating.formatted(.number.precision(.fractionLength(0...1)))) / 10")
                     .foregroundStyle(.secondary)
             }
             Spacer()
