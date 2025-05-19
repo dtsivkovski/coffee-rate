@@ -4,6 +4,10 @@
 //
 //  Created by Daniel Tsivkovski on 4/29/25.
 //
+// References used for Sharing Image:
+//  - https://www.hackingwithswift.com/quick-start/swiftui/how-to-convert-a-swiftui-view-to-an-image
+//  - https://www.reddit.com/r/SwiftUI/comments/19ehpnq/sharelink_imagerenderer/
+//
 
 import SwiftUI
 import SwiftData
@@ -17,11 +21,12 @@ struct RatingDetails: View {
     @Query var ratings: [Rating];
     var rating : Rating;
     
+    // used for deletion, sharing, and navigation
     @State private var deleteAlertPresented: Bool = false;
+    @State private var renderedImage = Image(systemName: "photo");
     @Binding var navigationPath: NavigationPath;
     
     // gets the index for the rating position
-    // TODO: use when editing (to know which one needs to be changed in the modelContext)
     var ratingIndex : Int {
         ratings.firstIndex(where: { $0.id == rating.id }) ?? 0;
     }
@@ -38,6 +43,7 @@ struct RatingDetails: View {
         }
     }
     
+    // gets background color for the rating circle
     var circleBackgroundColor : Color {
         get {
             if (colorScheme == .dark) {
@@ -64,6 +70,8 @@ struct RatingDetails: View {
             // create the map element
             if (rating.location != nil) {
                 MapPreview(name: rating.name, location: rating.location!)
+                    .padding(20)
+                    .shadow(radius: 8, y: 5.0)
             }
             else {
                 // rectangle to account for circle being shifted up when no location
@@ -147,11 +155,11 @@ struct RatingDetails: View {
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
-                Button(action: {
-                    // implement share feature
-                }) {
-                    Image(systemName: "square.and.arrow.up")
-                }
+                ShareLink( // share link for image preview
+                    "Here's my rating for \(rating.name)!",
+                    item: renderedImage,
+                    preview: SharePreview(Text("Here's my rating for \(rating.name)!"), image: renderedImage)
+                )
             }
         }
         // create alert for deletion of rating
@@ -171,7 +179,25 @@ struct RatingDetails: View {
                 secondaryButton: .cancel()
             )
         }
+        .onAppear {
+            renderShareableImage()
+        }
     }
+
+    // renders the view for the shareable image
+    @MainActor
+    func renderShareableImage() -> Void {
+        let renderer = ImageRenderer(content: ShareableRating(rating: rating))
+        renderer.scale = UIScreen.main.scale;
+        
+        if let uiImage = renderer.uiImage {
+            renderedImage = Image(uiImage: uiImage)
+        } else {
+            renderedImage = Image(systemName: "exclamationmark.triangle") // if error
+        }
+        
+    }
+    
 }
 
 struct RatingProgress : View {
@@ -230,12 +256,12 @@ struct MapPreview : View {
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
         .frame(height: 300)
         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 20, height: 20)))
-        .padding(20)
-        .shadow(radius: 8, y: 5.0)
     }
 }
 
 #Preview {
     @Previewable @State var navigationPath: NavigationPath = NavigationPath();
-    RatingDetails(rating: Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 2.712341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!"), navigationPath: $navigationPath)
+    let r = Rating(name: "Contra Coffee and Tea",latitude: 33.788187, longitude: -117.851938, whenVisited: Date(), isFavorited: false, studyVibe: 10, foodOrDrinkRating: 9, noiseLevel: .normal, availability: 0, overallRating: 4.12341234, comments: "I'm so MAD that there aren't any spots available at any reasonable times of the day!!!")
+    RatingDetails(rating: r, navigationPath: $navigationPath)
+    
 }
