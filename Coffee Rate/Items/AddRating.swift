@@ -57,6 +57,8 @@ struct MapSearchSheet : View {
     @Binding var currentMapRegion: MKCoordinateRegion;
     @Binding var selectedLocation: SearchResult?;
     
+    @FocusState private var searchFieldIsFocused: Bool;
+    
     var body: some View {
             VStack {
                 // search element
@@ -69,6 +71,7 @@ struct MapSearchSheet : View {
                             }
                             locationService.update(queryFragment: newValue)
                         }
+                        .focused($searchFieldIsFocused)
                     if (!searchText.isEmpty) {
                         // button to clear completions
                         Button {
@@ -100,6 +103,8 @@ struct MapSearchSheet : View {
                             }
                             // update tapped list item
                             self.tappedListItem = completion;
+                            self.searchFieldIsFocused = false;
+                            
                         }) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(completion.title)
