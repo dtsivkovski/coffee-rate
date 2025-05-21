@@ -10,14 +10,13 @@ import SwiftData
 
 struct WantToGoList: View {
     @Environment(\.modelContext) var modelContext
-    //@Query //uncommented for testing
-    var items: [WantToGoItem] = []
+    @Query var items: [WantToGoItem]
     
     @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        Text("Logo Linking to All Ratings Map Here") //replace with header + logo
-            .padding()
+        LogoHeader()
+        
         NavigationStack(path: $navigationPath){
             //List of want to go items
             List{
@@ -31,29 +30,34 @@ struct WantToGoList: View {
             }
             .navigationTitle("Want To Go")
             
-            .toolbar{
-                Button(action: addShop) {
-                    Image(systemName: "rectangle.stack.fill.badge.plus")
-                        .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
-                }
-                .buttonStyle(.bordered)
-                .background(Color.white)
-                
-            }
+            //want to go item navigation
             .navigationDestination(for: WantToGoItem.self) { item in
                 WantToGoView(item: item, navigationPath: $navigationPath)
             }
+            
+            // navigate to AddWantToGo View
+            .navigationDestination(for: String.self) { value in
+                if value == "Add Want To Go" {
+                    AddWantToGo(navigationPath: $navigationPath)
+                }
+            }
+            .toolbar{
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(value: "Add Want To Go") {
+                        Image(systemName: "rectangle.stack.fill.badge.plus")
+                            .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
+                    }
+                }
+            }
+            
+            
         }
+        
     }//end of body
     func deleteItems(at offsets: IndexSet) {
         for index in offsets {
             modelContext.delete(items[index])
         }
-    }
-    
-    func addShop(){
-        let newShop = WantToGoItem(name: "New Coffee Shop", hasVisited: false)
-        modelContext.insert(newShop)
     }
     
 }
@@ -75,11 +79,5 @@ struct ListCell: View {
 }
 
 #Preview {
-    WantToGoList(items: [
-        WantToGoItem(name: "Long Dog Coffee and Treats", hasVisited: false, latitude: 33.789180, longitude: -117.853625),
-        WantToGoItem(name: "Contra", hasVisited: false, latitude: 33.789180, longitude: -117.853625)
-    ])
+    ContentView()
 }
-
-
-

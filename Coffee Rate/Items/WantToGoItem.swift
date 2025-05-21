@@ -2,7 +2,7 @@
 //  WantToGo.swift
 //  Coffee Rate
 //
-//  Created by [Your Name] on [Date].
+//  Created by Ava DeCristofaro on 4/30.
 //
 
 import Foundation
@@ -53,7 +53,7 @@ class WantToGoItem: Identifiable {
 
 struct WantToGoView: View {
     @Environment(\.modelContext) var modelContext
-    //@Query var items: [WantToGoItem]
+    @Query var items: [WantToGoItem]
     @Bindable var item: WantToGoItem
     var hasVisited: Bool = false
     
@@ -162,12 +162,11 @@ struct WantToGoView: View {
             .padding(.trailing) //padding right
             .padding(.bottom)
             
-            // TODO: add drop down to fill ratings after visiting
-                //if hasVisited = true, make rest of the rating info visible so the user can rate the shop
-                //change color of the circukar map pin icon green and red otherwise
-                //change color of the coffee cup on WantToGoList depending on user's rating
+            
+               
             // TODO: add rating to AllRatings
-                //have an 'Add' button after hasVisited is toggled to 'true' that has the same function as AddRating in order to add it to RatingsList
+                //if hasVisited = true
+                    //have an 'Add' button after hasVisited is toggled to 'true' that has the same function as AddRating in order to add it to RatingsList
             
             
         } //end of ScrollView
@@ -193,7 +192,5 @@ struct CheckboxView: View {
 }
 
 #Preview{
-    //input paramter values for testing
-    @Previewable @State var navPath = NavigationPath();
-    WantToGoView(item: WantToGoItem(name: "Long Dog Coffee and Treats", hasVisited: false, latitude: 33.789180, longitude: -117.853625), navigationPath: $navPath)
+    
 }

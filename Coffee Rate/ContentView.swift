@@ -18,6 +18,7 @@ struct ContentView: View {
     
     
     var body: some View {
+        
         TabView(selection: $selection) {
             Tab("My Ratings", systemImage: "list.bullet", value: 0) {
                 RatingsList()
@@ -29,7 +30,7 @@ struct ContentView: View {
                 AllRatingsMap()
             }
             Tab("Favorites", systemImage: "star", value: 3) {
-                Favorites()//allRatings: ratings)
+                Favorites()
             }
             Tab("My Stats", systemImage: "person.crop.circle", value: 4) {
                 StatsView()
