@@ -14,31 +14,61 @@ struct WantToGoList: View {
     
     @State private var navigationPath = NavigationPath()
     
+    //vars for deletion
+    @State private var itemToDelete: WantToGoItem? = nil;
+    @State private var showingDeleteAlert = false;
+    
     var body: some View {
         NavigationStack(path: $navigationPath){
             //List of want to go items
             List{
                 ForEach(items){ item in
-                    //replace VStack with ListCell and maybe ZStack with rounded rectangle
                     NavigationLink(value: item){
                         ListCell(item: item)
                     }
+                    .swipeActions {
+                        Button("Delete") {
+                            self.itemToDelete = item
+                            showingDeleteAlert = true
+                        }
+                        .tint(.red)
+                    }
                 } //end of ForEach
-                .onDelete(perform: deleteItems)
+                .confirmationDialog(
+                    Text("Are you sure you want to delete this item?"),
+                    isPresented: $showingDeleteAlert,
+                    titleVisibility: .visible
+                ) {
+                    Button("Delete", role: .destructive) {
+                        if let placeToDelete = itemToDelete {
+                            withAnimation {
+                                deleteItem(placeToDelete)
+                            }
+                        }
+                    }
+                    .tint(.red)
+                }
+                
             }
             .navigationTitle("Want To Go")
-            
+ 
             //want to go item navigation
             .navigationDestination(for: WantToGoItem.self) { item in
                 WantToGoView(item: item, navigationPath: $navigationPath)
             }
-            
-            // navigate to AddWantToGo View
+
+            //navigation to add want to go item and rating
             .navigationDestination(for: String.self) { value in
-                if value == "Add Want To Go" {
+                switch value {
+                case "Add Want To Go":
                     AddWantToGo(navigationPath: $navigationPath)
+                case "Add Rating":
+                    AddRating(navigationPath: $navigationPath)
+                default:
+                    Text("Unknown destination")
                 }
             }
+
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(value: "Add Want To Go") {
@@ -51,10 +81,9 @@ struct WantToGoList: View {
         }
         
     }//end of body
-    func deleteItems(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(items[index])
-        }
+
+    func deleteItem(_ item : WantToGoItem) {
+        modelContext.delete(item);
     }
     
 }

@@ -107,9 +107,9 @@ struct WantToGoView: View {
                     .font(.title)
                     .bold()
                     .multilineTextAlignment(.center)
-                .padding()
+                    .padding()
                 
-               
+                
                 ZStack {
                     RoundedRectangle(cornerRadius: 16)
                         .fill(.thinMaterial)
@@ -137,7 +137,7 @@ struct WantToGoView: View {
                     .padding(10)
                 } //end of ZStack
                 .padding(10)
-
+                
             } //end of Notes VStack
             .padding()
             
@@ -162,16 +162,24 @@ struct WantToGoView: View {
             .padding(.trailing) //padding right
             .padding(.bottom)
             
-            
-               
-            // TODO: add rating to AllRatings
-                //if hasVisited = true
-                    //have an 'Add' button after hasVisited is toggled to 'true' that has the same function as AddRating in order to add it to RatingsList
-            
-            
+            // to rate a place AFTER visiting
+            if (item.hasVisited == true){
+                HStack {
+                    Spacer()
+                    NavigationLink(value: "Add Rating") {
+                        Text("Rate Coffee Shop")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .padding()
+                    Spacer()
+                }
+            }
         } //end of ScrollView
     } //end of body
-    
 }
 
 //Displaying Toggle as a checkbox
@@ -192,5 +200,5 @@ struct CheckboxView: View {
 }
 
 #Preview{
-    
+    ContentView()
 }

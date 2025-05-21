@@ -17,7 +17,7 @@ struct LogoHeader: View {
                 .frame(height: 70)
                 .frame(maxWidth: .infinity)
 
-            Image("home-button")
+            Image("logo")
                 .resizable()
                 .frame(width: 150, height: 140)
                 .padding(-30)
