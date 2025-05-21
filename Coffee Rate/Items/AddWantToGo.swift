@@ -81,6 +81,7 @@ struct SubmitWantToGo: View {
                 id: UUID(),
                 name: confirmedLocation!.name,
                 hasVisited: false,
+                comments: comments,
                 latitude: confirmedLocation!.location.latitude,
                 longitude: confirmedLocation!.location.longitude
             )

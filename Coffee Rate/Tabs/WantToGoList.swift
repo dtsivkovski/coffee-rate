@@ -89,7 +89,31 @@ struct WantToGoList: View {
 }
 
 struct ListCell: View {
+    @Environment(\.colorScheme) var colorScheme;
+    
     var item: WantToGoItem
+    
+    // get color based on visited or not
+    var cupBackgroundColor : Color {
+        get {
+            if (colorScheme == .dark) {
+                if (item.hasVisited) {
+                    return Color(red: 50/256, green: 150/256, blue: 50/256)
+                } else if (!item.hasVisited) {
+                    return Color(red: 150/256, green: 50/256, blue: 50/256)
+                } else {
+                    return Color(.lightGray);
+                }
+            }
+            if (item.hasVisited) {
+                return Color(red: 50/256, green: 160/256, blue: 50/256)
+            } else if (!item.hasVisited) {
+                return Color(red: 200/256, green: 50/256, blue: 50/256)
+            } else {
+                return Color(.darkGray);
+            }
+        }
+    }
     
     var body: some View{
         HStack{
@@ -97,9 +121,12 @@ struct ListCell: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 50, height: 50)
+                .foregroundStyle(cupBackgroundColor)
+                .shadow(color: .black.opacity(0.2), radius: 1, y: 2)
                 .padding(.trailing, 10)
             Text(item.name)
                 .font(.title2)
+                .fontWeight(.medium)
         }
     }
 }

@@ -17,7 +17,7 @@ class WantToGoItem: Identifiable {
     // Coffee Shop Info
     var name: String
     var hasVisited: Bool
-    //var comments: String?;
+    var comments: String?;
     private var latitude: Double?
     private var longitude: Double?
     
@@ -38,13 +38,14 @@ class WantToGoItem: Identifiable {
         id: UUID = UUID(),
         name: String,
         hasVisited: Bool,
-        //comments: String? = nil,
+        comments: String? = nil,
         latitude: Double? = nil,
         longitude: Double? = nil
     ) {
         self.id = id
         self.name = name
         self.hasVisited = hasVisited
+        self.comments = comments
         self.latitude = latitude
         self.longitude = longitude
     }
@@ -53,23 +54,29 @@ class WantToGoItem: Identifiable {
 
 struct WantToGoView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(\.colorScheme) var colorScheme;
     @Query var items: [WantToGoItem]
     @Bindable var item: WantToGoItem
     var hasVisited: Bool = false
     
     @Binding var navigationPath: NavigationPath;
     
-    @AppStorage("comments") var comments: String = "Insert Comments Here"
-    
     var visitedColor : Color {
-            get {
-                if (item.hasVisited == true) {
-                    return Color(red: 185/255, green: 242/255, blue: 184/255)
+        get {
+            if (colorScheme == .dark){
+                if (item.hasVisited) {
+                    return Color(red: 50/256, green: 150/256, blue: 50/256)
                 } else {
-                    return Color(red: 252/255, green: 119/255, blue: 119/255)
+                    return Color(red: 150/256, green: 50/256, blue: 50/256)
                 }
             }
+            if (item.hasVisited) {
+                    return Color(red: 185/255, green: 242/255, blue: 184/255)
+            } else {
+                return Color(red: 252/255, green: 119/255, blue: 119/255)
+            }
         }
+    }
     
     var body: some View {
         ScrollView{
@@ -108,35 +115,24 @@ struct WantToGoView: View {
                     .bold()
                     .multilineTextAlignment(.center)
                     .padding()
-                
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(.thinMaterial)
-                        .shadow(radius: 8, y: 5.0)
-                    
-                    VStack(alignment: .center) {
-                        Text("Notes")
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                        
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.thinMaterial) // Match the card background
-                            
-                            TextEditor(text: $comments)
-                                .font(.caption)
-                                .padding(8) // internal padding for text
-                                .scrollContentBackground(.hidden)
-                                .background(Color.clear) // disable native background
-                                .cornerRadius(12)
-                            
-                        } //end of inner ZStack
-                        .frame(height: 100)
-                    } //end of VStack
-                    .padding(10)
-                } //end of ZStack
-                .padding(10)
+
+                // Notes section
+                if (item.comments != nil) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.thinMaterial)
+                            .shadow(radius: 8, y: 5.0)
+                        VStack {
+                            HStack {
+                                Text("Notes")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }.padding(-2)
+                            Text(item.comments!)
+                        }
+                        .padding(16)
+                    }.padding(.top, 10)
+                }
                 
             } //end of Notes VStack
             .padding()
@@ -163,7 +159,7 @@ struct WantToGoView: View {
             .padding(.bottom)
             
             // to rate a place AFTER visiting
-            if (item.hasVisited == true){
+            if (item.hasVisited){
                 HStack {
                     Spacer()
                     NavigationLink(value: "Add Rating") {
