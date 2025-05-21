@@ -15,8 +15,6 @@ struct WantToGoList: View {
     @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        LogoHeader()
-        
         NavigationStack(path: $navigationPath){
             //List of want to go items
             List{
@@ -45,7 +43,6 @@ struct WantToGoList: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(value: "Add Want To Go") {
                         Image(systemName: "rectangle.stack.fill.badge.plus")
-                            .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
                     }
                 }
             }

@@ -13,8 +13,7 @@ struct LogoHeader: View {
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(Color(red: 15/255, green: 102/255, blue: 23/255))
-                .opacity(0.1)
+                .opacity(0)
                 .frame(height: 70)
                 .frame(maxWidth: .infinity)
 

@@ -22,7 +22,6 @@ struct RatingsList: View {
     @State private var showingDeleteAlert = false;
     
     var body: some View {
-        LogoHeader()
         
         NavigationSplitView {
             List {
@@ -68,7 +67,6 @@ struct RatingsList: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(value: "Add Rating") {
                         Image(systemName: "plus.circle")
-                            .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
                     }
                 }
             }

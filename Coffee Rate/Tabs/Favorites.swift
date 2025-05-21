@@ -22,8 +22,6 @@ struct Favorites: View {
         }
     
     var body: some View {
-        LogoHeader()
-        
         NavigationSplitView {
             List(filteredRatings) { rating in
                 NavigationLink {
