@@ -22,9 +22,7 @@ struct RatingsList: View {
     @State private var showingDeleteAlert = false;
     
     var body: some View {
-        Text("Logo goes here") //replace with header + logo
-            .padding()
-
+        
         NavigationSplitView {
             List {
                 ForEach(filteredRatings) { rating in
@@ -59,7 +57,7 @@ struct RatingsList: View {
             .navigationDestination(for: Rating.self) { rating in
                 RatingDetails(rating: rating, navigationPath: $navigationPath)
             }
-            // add rating navigaiton
+            // add rating navigaiton 
             .navigationDestination(for: String.self) { value in
                 if value == "Add Rating" {
                     AddRating(navigationPath: $navigationPath)
@@ -69,7 +67,6 @@ struct RatingsList: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink(value: "Add Rating") {
                         Image(systemName: "plus.circle")
-                            .foregroundColor(Color(red: 15/255, green: 102/255, blue: 23/255))
                     }
                 }
             }

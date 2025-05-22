@@ -15,6 +15,6 @@ struct Coffee_RateApp: App {
             ContentView()
             
         }
-        .modelContainer(for: Rating.self)
+        .modelContainer(for: [Rating.self, WantToGoItem.self])
     }
 }

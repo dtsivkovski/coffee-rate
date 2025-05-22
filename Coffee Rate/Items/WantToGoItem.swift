@@ -2,7 +2,7 @@
 //  WantToGo.swift
 //  Coffee Rate
 //
-//  Created by [Your Name] on [Date].
+//  Created by Ava DeCristofaro on 4/30.
 //
 
 import Foundation
@@ -17,7 +17,7 @@ class WantToGoItem: Identifiable {
     // Coffee Shop Info
     var name: String
     var hasVisited: Bool
-    //var comments: String?;
+    var comments: String?;
     private var latitude: Double?
     private var longitude: Double?
     
@@ -38,13 +38,14 @@ class WantToGoItem: Identifiable {
         id: UUID = UUID(),
         name: String,
         hasVisited: Bool,
-        //comments: String? = nil,
+        comments: String? = nil,
         latitude: Double? = nil,
         longitude: Double? = nil
     ) {
         self.id = id
         self.name = name
         self.hasVisited = hasVisited
+        self.comments = comments
         self.latitude = latitude
         self.longitude = longitude
     }
@@ -53,23 +54,29 @@ class WantToGoItem: Identifiable {
 
 struct WantToGoView: View {
     @Environment(\.modelContext) var modelContext
-    //@Query var items: [WantToGoItem]
+    @Environment(\.colorScheme) var colorScheme;
+    @Query var items: [WantToGoItem]
     @Bindable var item: WantToGoItem
     var hasVisited: Bool = false
     
     @Binding var navigationPath: NavigationPath;
     
-    @AppStorage("comments") var comments: String = "Insert Comments Here"
-    
     var visitedColor : Color {
-            get {
-                if (item.hasVisited == true) {
-                    return Color(red: 185/255, green: 242/255, blue: 184/255)
+        get {
+            if (colorScheme == .dark){
+                if (item.hasVisited) {
+                    return Color(red: 50/256, green: 150/256, blue: 50/256)
                 } else {
-                    return Color(red: 252/255, green: 119/255, blue: 119/255)
+                    return Color(red: 150/256, green: 50/256, blue: 50/256)
                 }
             }
+            if (item.hasVisited) {
+                    return Color(red: 185/255, green: 242/255, blue: 184/255)
+            } else {
+                return Color(red: 252/255, green: 119/255, blue: 119/255)
+            }
         }
+    }
     
     var body: some View {
         ScrollView{
@@ -107,37 +114,26 @@ struct WantToGoView: View {
                     .font(.title)
                     .bold()
                     .multilineTextAlignment(.center)
-                .padding()
-                
-               
-                ZStack {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(.thinMaterial)
-                        .shadow(radius: 8, y: 5.0)
-                    
-                    VStack(alignment: .center) {
-                        Text("Notes")
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                        
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.thinMaterial) // Match the card background
-                            
-                            TextEditor(text: $comments)
-                                .font(.caption)
-                                .padding(8) // internal padding for text
-                                .scrollContentBackground(.hidden)
-                                .background(Color.clear) // disable native background
-                                .cornerRadius(12)
-                            
-                        } //end of inner ZStack
-                        .frame(height: 100)
-                    } //end of VStack
-                    .padding(10)
-                } //end of ZStack
-                .padding(10)
+                    .padding()
 
+                // Notes section
+                if (item.comments != nil) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(.thinMaterial)
+                            .shadow(radius: 8, y: 5.0)
+                        VStack {
+                            HStack {
+                                Text("Notes")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }.padding(-2)
+                            Text(item.comments!)
+                        }
+                        .padding(16)
+                    }.padding(.top, 10)
+                }
+                
             } //end of Notes VStack
             .padding()
             
@@ -162,17 +158,24 @@ struct WantToGoView: View {
             .padding(.trailing) //padding right
             .padding(.bottom)
             
-            // TODO: add drop down to fill ratings after visiting
-                //if hasVisited = true, make rest of the rating info visible so the user can rate the shop
-                //change color of the circukar map pin icon green and red otherwise
-                //change color of the coffee cup on WantToGoList depending on user's rating
-            // TODO: add rating to AllRatings
-                //have an 'Add' button after hasVisited is toggled to 'true' that has the same function as AddRating in order to add it to RatingsList
-            
-            
+            // to rate a place AFTER visiting
+            if (item.hasVisited){
+                HStack {
+                    Spacer()
+                    NavigationLink(value: "Add Rating") {
+                        Text("Rate Coffee Shop")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .padding()
+                    Spacer()
+                }
+            }
         } //end of ScrollView
     } //end of body
-    
 }
 
 //Displaying Toggle as a checkbox
@@ -193,7 +196,5 @@ struct CheckboxView: View {
 }
 
 #Preview{
-    //input paramter values for testing
-    @Previewable @State var navPath = NavigationPath();
-    WantToGoView(item: WantToGoItem(name: "Long Dog Coffee and Treats", hasVisited: false, latitude: 33.789180, longitude: -117.853625), navigationPath: $navPath)
+    ContentView()
 }

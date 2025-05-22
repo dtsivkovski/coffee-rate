@@ -1,13 +1,13 @@
-//
-//  AddRating.swift
-//  Coffee Rate
-//
-//  Created by Daniel Tsivkovski on 4/29/25.
-//
-//  Reference used for Map Search:
-//   - https://www.polpiella.dev/mapkit-and-swiftui-searchable-map - This reference was used to help create the search aspects for the Add Rating view
-//   - https://www.hackingwithswift.com/quick-start/swiftui/how-to-dismiss-the-keyboard-for-a-textfield - This reference was used to help with toggling the keyboard off when you click on a different button
-//
+////
+////  AddRating.swift
+////  Coffee Rate
+////
+////  Created by Daniel Tsivkovski on 4/29/25.
+////
+////  Reference used for Map Search:
+////   - https://www.polpiella.dev/mapkit-and-swiftui-searchable-map - This reference was used to help create the search aspects for the Add Rating view
+////   - https://www.hackingwithswift.com/quick-start/swiftui/how-to-dismiss-the-keyboard-for-a-textfield - This reference was used to help with toggling the keyboard off when you click on a different button
+////
 
 
 import SwiftUI
@@ -27,7 +27,7 @@ struct AddRating: View {
             span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
         )
 
-    var body: some View {
+    var body: some View {        
         ScrollView {
             Text("Rate a spot")
                 .font(.title)
