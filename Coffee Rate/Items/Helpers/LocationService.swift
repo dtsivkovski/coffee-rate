@@ -7,6 +7,8 @@
 //  Reference used for Map Search:
 //   - https://www.polpiella.dev/mapkit-and-swiftui-searchable-map
 //
+//  Note: NOT counted as part of our 7 swiftUI view requirements, as the majority of this was from a tutorial.
+//
 
 import MapKit
 

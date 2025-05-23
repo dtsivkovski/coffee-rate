@@ -2,17 +2,13 @@
 //  ContentView.swift
 //  Coffee Rate
 //
-//  Boilerplate created by Daniel Tsivkovski on 4/29/25.
+//  Created by Daniel Tsivkovski on 4/29/25.
 //
 
 import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    
-    // TODO: probably get rid of these to put in other files later
-    @Environment(\.modelContext) var modelContext;
-    @Query var ratings: [Rating];
     
     @State private var selection: Int = 0;
     

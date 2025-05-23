@@ -2,7 +2,7 @@
 //  RatingsList.swift
 //  Coffee Rate
 //
-//  Boilerplate created by Daniel Tsivkovski on 4/29/25.
+//  Created by Daniel Tsivkovski on 4/29/25.
 //
 
 import SwiftUI

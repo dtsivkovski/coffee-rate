@@ -2,7 +2,7 @@
 //  Favorites.swift
 //  Coffee Rate
 //
-//  Created by Daniel Tsivkovski on 4/29/25.
+//  Initial file created by Daniel Tsivkovski on 4/29/25, work done by Ava
 //  Reference used for Favorites functionality:
 // - https://developer.apple.com/tutorials/swiftui/handling-user-input -
 //  This reference was used to create a Favorites button to keep track of favorite Ratings and display them in a seperate Favoirtes List

@@ -100,6 +100,7 @@ struct RatingDetails: View {
                     Text(rating.name)
                         .font(.title)
                         .fontWeight(.bold)
+                    // favorite button added by Ava
                     FavoriteButton(isSet: Bindable(rating).isFavorited)
                         .frame(width: 40)
                 }
