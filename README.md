@@ -5,6 +5,24 @@ Developed by: [Ava DeCristofaro](https://github.com/avadecrist/) and [Daniel Tsi
 
 Course: CPSC357-01
 
+## Files
+- AllRatingsMap.swift
+- Favorites.swift
+- RatingsList.swift
+- StatsView.swift
+- WantToGoList.swift
+- ContentView.swift
+- Coffee_RateApp.swift
+- AddRating.swift
+- AddWantToGo.swift
+- Rating.swift
+- RatingDetails.swift
+- WantToGoItem.swift
+- FavoriteButton.swift
+- LocationService.swift - (note: this file does not count towards our Swift view count, as we followed a tutorial for most of it to implement Map search autocomplete)
+- LogoHeader.swift
+- ShareableRating.swift
+
 ## How to run
 - Pull repository from github to local machine with xcode
 - Open directory as an xcode project.
